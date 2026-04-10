@@ -18,10 +18,10 @@ def grade(state: IncidentState, action_history: List[IncidentAction]) -> float:
 
     if resolved:
         if not fixed_downstream and steps <= 10:
-            return 1.0
+            return 0.95
         else:
-            return 0.65
+            return 0.62
     elif fixed_downstream and not fixed_root:
-        return 0.3
+        return 0.28
     else:
-        return 0.1
+        return 0.05

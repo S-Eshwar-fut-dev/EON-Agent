@@ -21,7 +21,7 @@ class RewardCalculator:
         elif task_name == "ambiguous_multiregion":
             from server.tasks.task3_ambiguous import grade
         else:
-            def grade(s, a): return 0.0
+            def grade(s, a): return 0.01
 
         total_score = grade(state.state, action_history)
         
@@ -56,7 +56,7 @@ class RewardCalculator:
         diff = total_score - final_sum
         breakdown["fix"] = round(breakdown["fix"] + diff, 3)
         
-        value = min(max(sum(breakdown.values()), 0.0), 1.0)
+        value = min(max(sum(breakdown.values()), 0.01), 0.99)
         
         return IncidentReward(value=value, breakdown=breakdown)
 

@@ -26,13 +26,13 @@ def grade(state: IncidentState, action_history: List[IncidentAction]) -> float:
 
     if resolved:
         if steps <= 7:
-            return 1.0
+            return 0.95
         else:
             # 8 to 10 steps, or applied wrong fix before right fix
-            return 0.8
+            return 0.78
     elif fixed_root and wrong_fix:
-        return 0.65
+        return 0.62
     elif queried_root:
-        return 0.4
+        return 0.38
     else:
-        return 0.1
+        return 0.05
