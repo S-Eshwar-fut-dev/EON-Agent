@@ -1,0 +1,51 @@
+name: eon-agent
+version: "1.0.0"
+description: >
+  EON Agent: Production incident response simulator. An LLM agent acts as an
+  on-call SRE, diagnosing and resolving synthetic distributed system failures
+  using bounded tool calls (query_logs, check_metrics, apply_fix, rollback,
+  escalate).
+tags: [sre, incident-response, distributed-systems, observability, eon-agent]
+tasks:
+  - name: single_fault
+    difficulty: easy
+    description: >
+      A single microservice is down. Logs and metrics unambiguously point to
+      one root cause. Agent must identify the failing service and apply the
+      correct fix within 10 steps.
+    max_steps: 10
+  - name: cascading_failure
+    difficulty: medium
+    description: >
+      A downstream dependency failure has propagated to 3 services. Agent must
+      trace the dependency chain, identify the origin, and apply a targeted fix
+      within 15 steps.
+    max_steps: 15
+  - name: ambiguous_multiregion
+    difficulty: hard
+    description: >
+      Two simultaneous degraded signals across regions with a shared but non-
+      obvious root cause (e.g. a bad config rollout affecting only certain AZs).
+      Agent must correlate signals across services and regions and apply the 
+      correct remediation within 20 steps.
+    max_steps: 20
+action_space:
+  type: discrete_parametric
+  actions:
+    - query_logs
+    - check_metrics
+    - list_services
+    - get_dependencies
+    - apply_fix
+    - rollback
+    - escalate
+    - resolve
+observation_space:
+  alert: string
+  service_graph: object
+  recent_alerts: list
+  last_action_result: string
+  step_count: integer
+  resolved: boolean
+reward_range: [0.0, 1.0]
+episode_end: resolved == true OR step_count >= max_steps
